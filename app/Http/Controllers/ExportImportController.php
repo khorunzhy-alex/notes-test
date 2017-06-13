@@ -27,8 +27,9 @@ class ExportImportController extends Controller
     }
 
     private function getXML(){
+        $xml_header = '<?xml version="1.0"?>';
         $notes = Note::all();
-        $content = view('export.xml', compact('notes'));
+        $content = view('export.xml', compact('xml_header','notes'));
         File::put(public_path('exports/export.xml'), $content);
         return response()->download(public_path('exports/export.xml'));
     }
@@ -77,7 +78,7 @@ class ExportImportController extends Controller
 
         Note::create([
             'title' => $title,
-            'text' => $text
+            'text' => html_entity_decode($text)
         ]);
     }
 }
